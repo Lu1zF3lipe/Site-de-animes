@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Animes {
+  id          Int              @id @default(autoincrement())
+  name        String           @db.VarChar(45)
+  relase_date DateTime
+  descrition  String?          @db.VarChar(1000)
+  avaliation  Float?
+  author      String           @db.VarChar(45)
+  created_at  DateTime         @default(now())
+  updated_at  DateTime         @updatedAt
+  genre_id    Int
+  studios     Animes_Studios[]
+  seasons     Seasons[]
+
+  genre Genre @relation(fields: [genre_id], references: [id])
+}
+
+model Genre {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(45)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  animes Animes[]
+}
+
+model Studios {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(45)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  animes Animes_Studios[]
+}
+
+model Animes_Studios {
+  animes_id  Int
+  studios_id Int
+  updated_at DateTime @updatedAt
+
+  studios Studios @relation(fields: [studios_id], references: [id])
+  animes  Animes  @relation(fields: [animes_id], references: [id])
+
+  @@id([animes_id, studios_id])
+}
+
+model Seasons {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(45)
+  relase_date DateTime
+  author      String     @db.VarChar(45)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  animes_id   Int
+  animes      Animes     @relation(fields: [animes_id], references: [id])
+  Episodes    Episodes[]
+}
+
+model Episodes {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(45)
+  number       Int
+  number_order Int
+  author       String   @db.VarChar(45)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  seasons      Seasons  @relation(fields: [seasons_id], references: [id])
+  seasons_id   Int
+}
