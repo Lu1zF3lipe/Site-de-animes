@@ -1,18 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { AnimesModule } from './animes.module';
 import { HttpException, HttpStatus, ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AnimesModule);
+  const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       exceptionFactory: (err) => {
-        console.log("ERROR", err);
+        console.log('ERROR', err);
         return new HttpException(
-        'Dados obrigatorios não informados ou invalidos',
-        HttpStatus.BAD_REQUEST,
-      );
+          'Dados obrigatorios não informados ou invalidos',
+          HttpStatus.BAD_REQUEST,
+        );
       },
     }),
   );

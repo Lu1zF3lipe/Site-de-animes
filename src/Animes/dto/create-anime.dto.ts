@@ -1,13 +1,21 @@
-import { Transform } from "class-transformer";
-import { IsDate, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
+import { Transform } from 'class-transformer';
+import {
+  IsDate,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 export class createAnimeDTO {
   @IsString()
-  @MaxLength(50)
+  @MaxLength(45)
   name: string;
 
   @IsDate()
-  @Transform((params)=> new Date(params.value))
+  @Transform((params) => new Date(params.value))
   relase_date: Date;
 
   @IsOptional()
@@ -22,7 +30,7 @@ export class createAnimeDTO {
   avaliation?: number;
 
   @IsString()
-  @MaxLength(50)
+  @MaxLength(45)
   author: string;
 
   @IsNumber()

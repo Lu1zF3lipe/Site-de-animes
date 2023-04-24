@@ -14,7 +14,7 @@ export class Animes {
   id: number;
 
   @IsString()
-  @MaxLength(50)
+  @MaxLength(45)
   name: string;
 
   @IsDate()
@@ -32,7 +32,7 @@ export class Animes {
   avaliation?: number;
 
   @IsString()
-  @MaxLength(50)
+  @MaxLength(45)
   author: string;
 
   @IsDate()
