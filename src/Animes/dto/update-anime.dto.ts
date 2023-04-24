@@ -9,7 +9,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class createAnimeDTO {
+export class updateAnimeDTO {
   @IsString()
   @MaxLength(45)
   name: string;

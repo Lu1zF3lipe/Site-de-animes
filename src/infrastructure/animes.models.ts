@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 
 export class Animes {
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   id: number;
 
   @IsString()
@@ -18,7 +18,7 @@ export class Animes {
   name: string;
 
   @IsDate()
-  relase_date: Date;
+  release_date: Date;
 
   @IsOptional()
   @IsString()
