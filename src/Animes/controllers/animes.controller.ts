@@ -8,10 +8,12 @@ import {
   Patch,
   Param,
   ParseIntPipe,
+  Delete,
+  HttpCode
 } from '@nestjs/common';
-import { createAnimeDTO } from '../dto/create-anime.dto';
+import { createAnimeDTO } from '../dto/animesDTO/create-anime.dto';
 import { AnimesService } from 'src/domain/services/animes.service';
-import { FindByNameDTO } from '../dto/find-by-name.dto';
+import { FindByNameDTO } from '../dto/animesDTO/find-by-name.dto';
 import { updateAnimeDTO } from '../dto/update-anime.dto';
 
 @Controller('animes')
@@ -49,5 +51,11 @@ export class AnimesComtroller {
       statusCode: 200,
       message: 'Operação realizada com sucesso.',
     };
+  }
+
+  @HttpCode(204)
+  @Delete('/:id')
+  async delete(@Param('id') id: number) {
+    await this.AnimesService.delete(id);
   }
 }

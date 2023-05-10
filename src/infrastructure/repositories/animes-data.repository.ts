@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaProvider } from '../database/prisma.providers';
-import { createAnimeDTO } from 'src/Animes/dto/create-anime.dto';
+import { createAnimeDTO } from 'src/Animes/dto/animesDTO/create-anime.dto';
 import { Animes } from '../animes.models';
 import { plainToInstance } from 'class-transformer';
-import { FindByNameDTO } from 'src/Animes/dto/find-by-name.dto';
+import { FindByNameDTO } from 'src/Animes/dto/animesDTO/find-by-name.dto';
 import { updateAnimeDTO } from 'src/Animes/dto/update-anime.dto';
+import { promises } from 'dns';
 
 @Injectable()
 export class AnimesDataRepository {
@@ -76,5 +77,13 @@ export class AnimesDataRepository {
     });
 
     return plainToInstance(Animes, updatedAnime);
+  }
+
+  async delete(id: number): Promise<Animes> {
+    const deletedUser = await this.prisma.animes.delete({
+      where: { id }
+    })
+
+    return plainToInstance(Animes, deletedUser);
   }
 }

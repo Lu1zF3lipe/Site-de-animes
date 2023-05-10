@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { createAnimeDTO } from 'src/Animes/dto/create-anime.dto';
-import { FindByNameDTO } from 'src/Animes/dto/find-by-name.dto';
+import { createAnimeDTO } from 'src/Animes/dto/animesDTO/create-anime.dto';
+import { FindByNameDTO } from 'src/Animes/dto/animesDTO/find-by-name.dto';
 import { updateAnimeDTO } from 'src/Animes/dto/update-anime.dto';
 import { AnimesDataRepository } from 'src/infrastructure/repositories/animes-data.repository';
 
@@ -52,5 +52,20 @@ export class AnimesService {
     );
 
     return updatedAnime;
+  }
+
+  public async delete (id: number) {
+    if (id) {
+      const animeExist = await this.AnimesDataRepository.findById(id);
+      if (!animeExist) {
+        throw new HttpException(
+          'Nenhum anime foi encontrado. Favor revisar os critérios da sua pesquisa!',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+    }
+
+    const deletedUser = await this.AnimesDataRepository.delete(id);
+    return deletedUser;
   }
 }
