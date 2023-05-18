@@ -5,7 +5,6 @@ import { Animes } from '../animes.models';
 import { plainToInstance } from 'class-transformer';
 import { FindByNameDTO } from 'src/Animes/dto/animesDTO/find-by-name.dto';
 import { updateAnimeDTO } from 'src/Animes/dto/update-anime.dto';
-import { promises } from 'dns';
 
 @Injectable()
 export class AnimesDataRepository {
@@ -40,6 +39,9 @@ export class AnimesDataRepository {
           contains: name,
         },
       },
+      include: {
+        genre: true
+      }
     });
 
     return plainToInstance(Animes, findByName);
@@ -48,9 +50,12 @@ export class AnimesDataRepository {
   async findById(id: number): Promise<Animes> {
     const findById = await this.prisma.animes.findUnique({
       where: { id },
+      include: {
+        genre: true
+      }
     });
 
-    return findById;
+    return plainToInstance(Animes, findById);
   }
 
   async update(
@@ -83,7 +88,18 @@ export class AnimesDataRepository {
     const deletedUser = await this.prisma.animes.delete({
       where: { id }
     })
+    this.prisma.animes.findMany({
+      where: {
+        genre:{
+          name: name
+        }
+      }
+    })
 
     return plainToInstance(Animes, deletedUser);
+  }
+
+  async findAnimesByGenre (name: string): Promise<Animes> {  
+
   }
 }

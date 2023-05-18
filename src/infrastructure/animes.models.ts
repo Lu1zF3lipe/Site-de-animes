@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import {
   IsString,
   MaxLength,
@@ -8,6 +8,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { Genre } from './Genre.models';
 
 export class Animes {
   @Exclude({ toPlainOnly: true })
@@ -35,12 +36,17 @@ export class Animes {
   @MaxLength(45)
   author: string;
 
+  @Exclude()
   @IsDate()
   created_at: Date;
 
+  @Exclude()
   @IsDate()
   updated_at: Date;
 
-  @IsNumber()
-  genre_id: number;
+  @Exclude()
+  genre_id: number
+
+  @Type(() => Genre)
+  genre: Genre;
 }
