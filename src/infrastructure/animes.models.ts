@@ -45,7 +45,7 @@ export class Animes {
   updated_at: Date;
 
   @Exclude()
-  genre_id: number
+  genre_id: number;
 
   @Type(() => Genre)
   genre: Genre;

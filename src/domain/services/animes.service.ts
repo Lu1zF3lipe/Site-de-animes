@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { createAnimeDTO } from 'src/Animes/dto/animesDTO/create-anime.dto';
+import { FindAnimesByGenreDTO } from 'src/Animes/dto/animesDTO/find-animes-by-genre.dto';
 import { FindByNameDTO } from 'src/Animes/dto/animesDTO/find-by-name.dto';
-import { updateAnimeDTO } from 'src/Animes/dto/update-anime.dto';
+import { updateAnimeDTO } from 'src/Animes/dto/animesDTO/update-anime.dto';
 import { AnimesDataRepository } from 'src/infrastructure/repositories/animes-data.repository';
 import { GenreDataRepository } from 'src/infrastructure/repositories/genre-data.repository';
 
@@ -10,17 +11,17 @@ import { GenreDataRepository } from 'src/infrastructure/repositories/genre-data.
 export class AnimesService {
   constructor(
     private readonly AnimesDataRepository: AnimesDataRepository,
-    private readonly GenreDataRepository: GenreDataRepository
+    private readonly GenreDataRepository: GenreDataRepository,
   ) {}
 
   public async create(create: createAnimeDTO) {
-      const genreExist = await this.GenreDataRepository.findById(create.genre_id)
-      if (!genreExist) {
-        throw new HttpException(
-          'Nenhum genero foi encontrado. certifique-se de escolher um genro vailido!',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+    const genreExist = await this.GenreDataRepository.findById(create.genre_id);
+    if (!genreExist) {
+      throw new HttpException(
+        'Nenhum genero foi encontrado. certifique-se de escolher um genro vailido!',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     const anime = await this.AnimesDataRepository.create(create);
     return anime;
   }
@@ -36,6 +37,20 @@ export class AnimesService {
     return animes;
   }
 
+  public async findAnimesByGenre(findAnimesByGenre: FindAnimesByGenreDTO) {
+    const animes = await this.AnimesDataRepository.findAnimesByGenre(
+      findAnimesByGenre,
+    );
+    if (animes.length === 0) {
+      throw new HttpException(
+        'Nenhum Anime foi encontrado. Favor revisar os critérios da sua pesquisa!',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return animes;
+  }
+
   public async findById(id: number) {
     const anime = await this.AnimesDataRepository.findById(id);
     if (!anime) {
@@ -48,13 +63,15 @@ export class AnimesService {
   }
 
   public async update(id: number, updateAnime: updateAnimeDTO) {
-    const genreExist = await this.GenreDataRepository.findById(updateAnime.genre_id)
-      if (!genreExist) {
-        throw new HttpException(
-          'Nenhum genero foi encontrado. certifique-se de escolher um genro vailido!',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+    const genreExist = await this.GenreDataRepository.findById(
+      updateAnime.genre_id,
+    );
+    if (!genreExist) {
+      throw new HttpException(
+        'Nenhum genero foi encontrado. certifique-se de escolher um genro vailido!',
+        HttpStatus.NOT_FOUND,
+      );
+    }
     if (id) {
       const animeExist = await this.AnimesDataRepository.findById(id);
       if (!animeExist) {
@@ -72,7 +89,7 @@ export class AnimesService {
     return updatedAnime;
   }
 
-  public async delete (id: number) {
+  public async delete(id: number) {
     if (id) {
       const animeExist = await this.AnimesDataRepository.findById(id);
       if (!animeExist) {

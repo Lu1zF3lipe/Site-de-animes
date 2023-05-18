@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Body, Post, Controller, Get, Patch, ParseIntPipe, Param } from '@nestjs/common';
+import {
+  Body,
+  Post,
+  Controller,
+  Get,
+  Patch,
+  ParseIntPipe,
+  Param,
+} from '@nestjs/common';
 import { GenreService } from 'src/domain/services/genre.service';
 import { UpdateGenreDTO } from '../dto/genreDTO/update-genre.dto';
 import { createGenreDTO } from '../dto/genreDTO/create-genre.dto';
@@ -32,7 +40,6 @@ export class GenreComtroller {
     return {
       statusCode: 200,
       message: 'Operação realizada com sucesso.',
-    }
-
+    };
   }
 }

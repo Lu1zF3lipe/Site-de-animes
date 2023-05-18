@@ -4,7 +4,8 @@ import { createAnimeDTO } from 'src/Animes/dto/animesDTO/create-anime.dto';
 import { Animes } from '../animes.models';
 import { plainToInstance } from 'class-transformer';
 import { FindByNameDTO } from 'src/Animes/dto/animesDTO/find-by-name.dto';
-import { updateAnimeDTO } from 'src/Animes/dto/update-anime.dto';
+import { updateAnimeDTO } from 'src/Animes/dto/animesDTO/update-anime.dto';
+import { FindAnimesByGenreDTO } from 'src/Animes/dto/animesDTO/find-animes-by-genre.dto';
 
 @Injectable()
 export class AnimesDataRepository {
@@ -40,8 +41,8 @@ export class AnimesDataRepository {
         },
       },
       include: {
-        genre: true
-      }
+        genre: true,
+      },
     });
 
     return plainToInstance(Animes, findByName);
@@ -51,8 +52,8 @@ export class AnimesDataRepository {
     const findById = await this.prisma.animes.findUnique({
       where: { id },
       include: {
-        genre: true
-      }
+        genre: true,
+      },
     });
 
     return plainToInstance(Animes, findById);
@@ -86,20 +87,21 @@ export class AnimesDataRepository {
 
   async delete(id: number): Promise<Animes> {
     const deletedUser = await this.prisma.animes.delete({
-      where: { id }
-    })
-    this.prisma.animes.findMany({
-      where: {
-        genre:{
-          name: name
-        }
-      }
-    })
+      where: { id },
+    });
 
     return plainToInstance(Animes, deletedUser);
   }
 
-  async findAnimesByGenre (name: string): Promise<Animes> {  
+  async findAnimesByGenre({ name }: FindAnimesByGenreDTO): Promise<Animes[]> {
+    const animes = await this.prisma.animes.findMany({
+      where: {
+        genre: {
+          name: name,
+        },
+      },
+    });
 
+    return plainToInstance(Animes, animes);
   }
 }

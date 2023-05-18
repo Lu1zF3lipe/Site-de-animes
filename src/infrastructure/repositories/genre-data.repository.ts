@@ -4,8 +4,6 @@ import { plainToInstance } from 'class-transformer';
 import { Genre } from '../Genre.models';
 import { createGenreDTO } from 'src/Animes/dto/genreDTO/create-genre.dto';
 import { UpdateGenreDTO } from 'src/Animes/dto/genreDTO/update-genre.dto';
-import { promises } from 'dns';
-
 @Injectable()
 export class GenreDataRepository {
   constructor(private prisma: PrismaProvider) {}
@@ -19,7 +17,7 @@ export class GenreDataRepository {
 
     return plainToInstance(Genre, createGenre);
   }
-  
+
   async findAll(): Promise<Genre[]> {
     const genres = await this.prisma.genre.findMany();
     return plainToInstance(Genre, genres);
@@ -32,9 +30,7 @@ export class GenreDataRepository {
     return plainToInstance(Genre, genre);
   }
 
-  async update(id: number, {
-    name,
-  }: UpdateGenreDTO): Promise<Genre> {
+  async update(id: number, { name }: UpdateGenreDTO): Promise<Genre> {
     const updatedGenre = await this.prisma.genre.update({
       data: {
         name,
@@ -42,6 +38,6 @@ export class GenreDataRepository {
       where: { id },
     });
 
-    return  plainToInstance(Genre, updatedGenre);
+    return plainToInstance(Genre, updatedGenre);
   }
 }

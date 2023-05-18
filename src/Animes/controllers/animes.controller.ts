@@ -9,12 +9,14 @@ import {
   Param,
   ParseIntPipe,
   Delete,
-  HttpCode
+  HttpCode,
 } from '@nestjs/common';
 import { createAnimeDTO } from '../dto/animesDTO/create-anime.dto';
 import { AnimesService } from 'src/domain/services/animes.service';
 import { FindByNameDTO } from '../dto/animesDTO/find-by-name.dto';
-import { updateAnimeDTO } from '../dto/update-anime.dto';
+import { updateAnimeDTO } from '../dto/animesDTO/update-anime.dto';
+import { query } from 'express';
+import { FindAnimesByGenreDTO } from '../dto/animesDTO/find-animes-by-genre.dto';
 
 @Controller('animes')
 export class AnimesComtroller {
@@ -32,6 +34,14 @@ export class AnimesComtroller {
   @Get()
   async findByName(@Query() findByName: FindByNameDTO) {
     const animes = await this.AnimesService.findByName(findByName);
+    return animes;
+  }
+
+  @Get('/genre')
+  async findAnimesByGenre(@Query() findAnimesByGenre: FindAnimesByGenreDTO) {
+    const animes = await this.AnimesService.findAnimesByGenre(
+      findAnimesByGenre,
+    );
     return animes;
   }
 

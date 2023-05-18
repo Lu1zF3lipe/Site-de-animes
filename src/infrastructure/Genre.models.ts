@@ -10,8 +10,8 @@ export class Genre {
   name: string;
 
   @Exclude()
-  created_at: Date
+  created_at: Date;
 
   @Exclude()
-  updated_at:Date
+  updated_at: Date;
 }
